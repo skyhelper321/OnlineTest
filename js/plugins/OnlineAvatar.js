@@ -354,8 +354,8 @@ function Game_Avatar() {
 	// ルームを作成する
 	OnlineManager.createRoom = function() {
 		// ルームIDとホストIDを生成（ここでは簡単のためプレイヤーIDを使用）
-		var roomId = this.user.uid;
-		var hostId = this.user.uid;
+		var roomId = 1;
+		var hostId = 1;
 	  
 		// Firebaseにルームの情報を保存
 		var roomRef = firebase.database().ref('rooms/' + roomId);
