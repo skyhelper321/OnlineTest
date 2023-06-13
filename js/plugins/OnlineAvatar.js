@@ -199,7 +199,7 @@ function Game_Avatar() {
 
 		if (this.parameters['syncSwitchStart'] || this.parameters['syncSwitchEnd']) {
 			if (this.switchRef) this.switchRef.off();
-			else this.switchRef = firebase.database().ref('switches');
+			else this.switchRef = firebase.database().ref('rooms/' + roomId + '/switches/');
 			OnlineManager.syncBusy = true;
 			this.switchRef.once('value', function(data) {
 				OnlineManager.syncBusy = false;
@@ -214,7 +214,7 @@ function Game_Avatar() {
 
 		if (this.parameters['syncVariableStart'] || this.parameters['syncVariableEnd']) {
 			if (this.variableRef) this.variableRef.off();
-			else this.variableRef = firebase.database().ref('variables');
+			else this.variableRef = firebase.database().ref('rooms/' + roomId + '/variables/');
 			OnlineManager.syncBusy = true;
 			this.variableRef.once('value', function(data) {
 				OnlineManager.syncBusy = false;
@@ -345,6 +345,71 @@ function Game_Avatar() {
 			this.variableRef.update(send);
 		}
 	};
+
+	// ルームを作成する
+	OnlineManager.createRoom = function() {
+		// ルームIDとホストIDを生成（ここでは簡単のためプレイヤーIDを使用）
+		var roomId = this.playerId;
+		var hostId = this.playerId;
+	  
+		// Firebaseにルームの情報を保存
+		var roomRef = firebase.database().ref('rooms/' + roomId);
+		roomRef.set({
+		  host: hostId,
+		  players: [hostId],
+		  ready: false
+		});
+	  };
+
+	// ルームに参加する
+	OnlineManager.joinRoom = function(roomId) {
+		var roomRef = firebase.database().ref('rooms/' + roomId);
+	
+		// ルームのプレイヤーのリストを取得
+		roomRef.child('players').once('value', function(snapshot) {
+		var players = snapshot.val();
+	
+		// プレイヤーの数が4人未満の場合、プレイヤーを追加
+		if (players.length < 4) {
+			players.push(OnlineManager.playerId);
+			roomRef.update({players: players});
+		} else {
+			// プレイヤーの数が4人以上の場合、エラーメッセージを表示
+			console.error('The room is full.');
+		}
+		});
+	};
+	
+	// レディを切り替える
+	OnlineManager.toggleReady = function(roomId) {
+		var roomRef = firebase.database().ref('rooms/' + roomId);
+	
+		// レディの状態を取得して切り替え
+		roomRef.child('ready').once('value', function(snapshot) {
+		var ready = snapshot.val();
+		roomRef.update({ready: !ready});
+		});
+	};
+	
+	// プレイヤーがログアウトしたときの処理
+	OnlineManager.logout = function(roomId) {
+		var roomRef = firebase.database().ref('rooms/' + roomId);
+	
+		// プレイヤーのリストから自分を削除
+		roomRef.child('players').once('value', function(snapshot) {
+		var players = snapshot.val();
+		var index = players.indexOf(OnlineManager.playerId);
+		if (index !== -1) {
+			players.splice(index, 1);
+			roomRef.update({players: players});
+		}
+	
+		// プレイヤーがいなくなったらルームを削除
+		if (players.length === 0) {
+			roomRef.remove();
+		}
+		});
+	};  
 
 
 
