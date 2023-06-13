@@ -246,7 +246,7 @@ function Game_Avatar() {
 			return;
 		}
 
-		this.mapRef = firebase.database().ref('map' + $gameMap.mapId().padZero(3));
+		this.mapRef = firebase.database().ref('room'+this.currentRoomId+'/map' + $gameMap.mapId().padZero(3));
 		this.selfRef = this.mapRef.child(this.user.uid);
 		this.selfRef.onDisconnect().remove();	//切断時にキャラ座標をリムーブ
 
@@ -315,7 +315,10 @@ function Game_Avatar() {
 
 	//送られたデータが自分自身でなく、マップが読み込まれている時は表示
 	OnlineManager.shouldDisplay = function(data) {
-		return data.key !== this.user.uid && this.mapExists();
+	    var playerRoomId = data.val().roomId;
+
+    	// 現在のプレイヤーのルームIDと同じ場合のみ表示
+    	return playerRoomId === this.currentRoomId;
 	};
 
 	//スイッチが同期範囲内
