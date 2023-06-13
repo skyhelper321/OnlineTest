@@ -138,6 +138,8 @@ function Game_Avatar() {
 	OnlineManager.variableRef = null;
 	OnlineManager.user = null;
 	OnlineManager.syncBusy = false;	//同期接続する瞬間、送信が受信を上書きするのを阻止
+	OnlineManager.roomId = null;
+	OnlineManager.hostId = null;
 
 	//ネット上からfirebaseファイルを読み込む
 	OnlineManager.initialize = function() {
