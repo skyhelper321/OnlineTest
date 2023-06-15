@@ -351,7 +351,7 @@ function Game_Avatar() {
 		// ルームIDとホストIDを生成（ここでは簡単のためプレイヤーIDを使用）
 		var roomId = 1;
 		var hostId = 1;
-		this.roomId = firebase.database().ref('room'+roomId);
+		roomId = firebase.database().ref('room/'+roomId);
 	  
 		// Firebaseにルームの情報を保存
 		var roomRef = firebase.database().ref('room/' + roomId);
