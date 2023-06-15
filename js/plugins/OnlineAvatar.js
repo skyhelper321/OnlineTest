@@ -201,7 +201,7 @@ function Game_Avatar() {
 
 		if (this.parameters['syncSwitchStart'] || this.parameters['syncSwitchEnd']) {
 			if (this.switchRef) this.switchRef.off();
-			else this.switchRef = firebase.database().ref('rooms/' + roomId + '/switches/');
+			else this.switchRef = firebase.database().ref('rooms/' + this.roomId + '/switches/');
 			OnlineManager.syncBusy = true;
 			this.switchRef.once('value', function(data) {
 				OnlineManager.syncBusy = false;
@@ -216,7 +216,7 @@ function Game_Avatar() {
 
 		if (this.parameters['syncVariableStart'] || this.parameters['syncVariableEnd']) {
 			if (this.variableRef) this.variableRef.off();
-			else this.variableRef = firebase.database().ref('rooms/' + roomId + '/variables/');
+			else this.variableRef = firebase.database().ref('rooms/' + this.roomId + '/variables/');
 			OnlineManager.syncBusy = true;
 			this.variableRef.once('value', function(data) {
 				OnlineManager.syncBusy = false;
@@ -317,10 +317,7 @@ function Game_Avatar() {
 
 	//送られたデータが自分自身でなく、マップが読み込まれている時は表示
 	OnlineManager.shouldDisplay = function(data) {
-	    var playerRoomId = data.val().roomId;
-
-    	// 現在のプレイヤーのルームIDと同じ場合のみ表示
-    	return playerRoomId === this.currentRoomId;
+		return data.key !== this.user.uid && this.mapExists();
 	};
 
 	//スイッチが同期範囲内
@@ -356,9 +353,10 @@ function Game_Avatar() {
 		// ルームIDとホストIDを生成（ここでは簡単のためプレイヤーIDを使用）
 		var roomId = 1;
 		var hostId = 1;
+		this.roomID = firebase.database().ref('room'+roomId);
 	  
 		// Firebaseにルームの情報を保存
-		var roomRef = firebase.database().ref('rooms/' + roomId);
+		var roomRef = firebase.database().ref('rooms/' + this.roomId);
 		roomRef.set({
 		  host: hostId,
 		  players: [hostId],
@@ -368,7 +366,7 @@ function Game_Avatar() {
 
 	// ルームに参加する
 	OnlineManager.joinRoom = function(roomId) {
-		var roomRef = firebase.database().ref('rooms/' + roomId);
+		var roomRef = firebase.database().ref('rooms/' + this.roomId);
 	
 		// ルームのプレイヤーのリストを取得
 		roomRef.child('players').once('value', function(snapshot) {
