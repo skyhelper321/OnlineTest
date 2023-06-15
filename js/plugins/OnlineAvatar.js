@@ -150,6 +150,7 @@ function Game_Avatar() {
 			throw new Error('firebaseの読み込みに失敗しました。F5でやり直してみてください。');
 		};
 		document.body.appendChild(script);
+		const roomId = 1;
 	};
 
 	//firebaseを起動
@@ -420,8 +421,6 @@ function Game_Avatar() {
 	var _SceneManager_initialize = SceneManager.initialize;
 	SceneManager.initialize = function() {
 		_SceneManager_initialize.apply(this, arguments);
-		//テスト用
-		const roomId = 1;
 		OnlineManager.initialize();
 	};
 
