@@ -138,8 +138,6 @@ function Game_Avatar() {
 	OnlineManager.variableRef = null;
 	OnlineManager.user = null;
 	OnlineManager.syncBusy = false;	//同期接続する瞬間、送信が受信を上書きするのを阻止
-	OnlineManager.roomId = 1;
-	OnlineManager.hostId = 1;
 
 	//ネット上からfirebaseファイルを読み込む
 	OnlineManager.initialize = function() {
@@ -201,7 +199,7 @@ function Game_Avatar() {
 
 		if (this.parameters['syncSwitchStart'] || this.parameters['syncSwitchEnd']) {
 			if (this.switchRef) this.switchRef.off();
-			else this.switchRef = firebase.database().ref('rooms/' + this.roomId + '/switches/');
+			else this.switchRef = firebase.database().ref('room/' + roomId + '/switches/');
 			OnlineManager.syncBusy = true;
 			this.switchRef.once('value', function(data) {
 				OnlineManager.syncBusy = false;
@@ -216,7 +214,7 @@ function Game_Avatar() {
 
 		if (this.parameters['syncVariableStart'] || this.parameters['syncVariableEnd']) {
 			if (this.variableRef) this.variableRef.off();
-			else this.variableRef = firebase.database().ref('rooms/' + this.roomId + '/variables/');
+			else this.variableRef = firebase.database().ref('room/' + roomId + '/variables/');
 			OnlineManager.syncBusy = true;
 			this.variableRef.once('value', function(data) {
 				OnlineManager.syncBusy = false;
@@ -248,7 +246,7 @@ function Game_Avatar() {
 			return;
 		}
 
-		this.mapRef = firebase.database().ref('room'+this.currentRoomId+'/map' + $gameMap.mapId().padZero(3));
+		this.mapRef = firebase.database().ref('room/'+roomId+'/map' + $gameMap.mapId().padZero(3));
 		this.selfRef = this.mapRef.child(this.user.uid);
 		this.selfRef.onDisconnect().remove();	//切断時にキャラ座標をリムーブ
 
@@ -356,7 +354,7 @@ function Game_Avatar() {
 		this.roomId = firebase.database().ref('room'+roomId);
 	  
 		// Firebaseにルームの情報を保存
-		var roomRef = firebase.database().ref('rooms/' + this.roomId);
+		var roomRef = firebase.database().ref('room/' + roomId);
 		roomRef.set({
 		  host: hostId,
 		  players: [hostId],
@@ -366,7 +364,7 @@ function Game_Avatar() {
 
 	// ルームに参加する
 	OnlineManager.joinRoom = function(roomId) {
-		var roomRef = firebase.database().ref('rooms/' + this.roomId);
+		var roomRef = firebase.database().ref('room/' + roomId);
 	
 		// ルームのプレイヤーのリストを取得
 		roomRef.child('players').once('value', function(snapshot) {
@@ -385,7 +383,7 @@ function Game_Avatar() {
 	
 	// レディを切り替える
 	OnlineManager.toggleReady = function(roomId) {
-		var roomRef = firebase.database().ref('rooms/' + roomId);
+		var roomRef = firebase.database().ref('room/' + roomId);
 	
 		// レディの状態を取得して切り替え
 		roomRef.child('ready').once('value', function(snapshot) {
@@ -396,7 +394,7 @@ function Game_Avatar() {
 	
 	// プレイヤーがログアウトしたときの処理
 	OnlineManager.logout = function(roomId) {
-		var roomRef = firebase.database().ref('rooms/' + roomId);
+		var roomRef = firebase.database().ref('room/' + roomId);
 	
 		// プレイヤーのリストから自分を削除
 		roomRef.child('players').once('value', function(snapshot) {
