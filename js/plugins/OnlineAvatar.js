@@ -138,6 +138,7 @@ function Game_Avatar() {
 	OnlineManager.variableRef = null;
 	OnlineManager.user = null;
 	OnlineManager.syncBusy = false;	//同期接続する瞬間、送信が受信を上書きするのを阻止
+	const roomId = 1;
 
 	//ネット上からfirebaseファイルを読み込む
 	OnlineManager.initialize = function() {
@@ -150,7 +151,6 @@ function Game_Avatar() {
 			throw new Error('firebaseの読み込みに失敗しました。F5でやり直してみてください。');
 		};
 		document.body.appendChild(script);
-		const roomId = 1;
 	};
 
 	//firebaseを起動
