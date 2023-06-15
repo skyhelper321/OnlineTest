@@ -420,6 +420,8 @@ function Game_Avatar() {
 	var _SceneManager_initialize = SceneManager.initialize;
 	SceneManager.initialize = function() {
 		_SceneManager_initialize.apply(this, arguments);
+		//テスト用
+		const roomId = 1;
 		OnlineManager.initialize();
 	};
 
