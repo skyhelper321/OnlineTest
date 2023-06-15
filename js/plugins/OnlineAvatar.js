@@ -138,6 +138,7 @@ function Game_Avatar() {
 	OnlineManager.variableRef = null;
 	OnlineManager.user = null;
 	OnlineManager.syncBusy = false;	//同期接続する瞬間、送信が受信を上書きするのを阻止
+	var roomId = 1;
 
 	//ネット上からfirebaseファイルを読み込む
 	OnlineManager.initialize = function() {
@@ -346,6 +347,7 @@ function Game_Avatar() {
 		}
 	};
 
+/*
 	// ルームを作成する
 	OnlineManager.createRoom = function() {
 		// ルームIDとホストIDを生成（ここでは簡単のためプレイヤーIDを使用）
@@ -412,7 +414,7 @@ function Game_Avatar() {
 		});
 	};  
 
-
+*/
 
 	//OnlineManagerを起動
 	var _SceneManager_initialize = SceneManager.initialize;
