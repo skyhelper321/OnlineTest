@@ -353,7 +353,7 @@ function Game_Avatar() {
 		// ルームIDとホストIDを生成（ここでは簡単のためプレイヤーIDを使用）
 		var roomId = 1;
 		var hostId = 1;
-		this.roomID = firebase.database().ref('room'+roomId);
+		this.roomId = firebase.database().ref('room'+roomId);
 	  
 		// Firebaseにルームの情報を保存
 		var roomRef = firebase.database().ref('rooms/' + this.roomId);
@@ -421,7 +421,6 @@ function Game_Avatar() {
 	SceneManager.initialize = function() {
 		_SceneManager_initialize.apply(this, arguments);
 		OnlineManager.initialize();
-		OnlineManager.createRoom();
 	};
 
 	//同じマップの時は$dataMapを読み込み直さない
