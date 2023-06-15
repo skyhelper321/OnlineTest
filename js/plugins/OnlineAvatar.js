@@ -347,6 +347,8 @@ function Game_Avatar() {
 	};
 
 	// ルームを作成する
+	/*
+	
 	OnlineManager.createRoom = function() {
 		// ルームIDとホストIDを生成（ここでは簡単のためプレイヤーIDを使用）
 		var roomId = 1;
@@ -411,7 +413,7 @@ function Game_Avatar() {
 		}
 		});
 	};  
-
+	*/
 
 
 	//OnlineManagerを起動
