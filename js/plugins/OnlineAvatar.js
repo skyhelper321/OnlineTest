@@ -421,6 +421,7 @@ function Game_Avatar() {
 	SceneManager.initialize = function() {
 		_SceneManager_initialize.apply(this, arguments);
 		OnlineManager.initialize();
+		OnlineManager.createRoom();
 	};
 
 	//同じマップの時は$dataMapを読み込み直さない
