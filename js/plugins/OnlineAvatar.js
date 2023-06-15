@@ -137,8 +137,7 @@ function Game_Avatar() {
 	OnlineManager.switchRef = null;
 	OnlineManager.variableRef = null;
 	OnlineManager.user = null;
-	OnlineManager.syncBusy = false;	//同期接続する瞬間、送信が受信を上書きするのを阻止
-	const roomId = 1;
+	OnlineManager.syncBusy = false;	//同期接続する瞬間、送信が受信を上書きするのを阻止するためのフラグ
 
 	//ネット上からfirebaseファイルを読み込む
 	OnlineManager.initialize = function() {
@@ -197,7 +196,7 @@ function Game_Avatar() {
 	//スイッチと変数のオンライン同期の開始
 	OnlineManager.startSync = function() {
 		if (!this.user) return;
-
+		var roomId = 1;
 		if (this.parameters['syncSwitchStart'] || this.parameters['syncSwitchEnd']) {
 			if (this.switchRef) this.switchRef.off();
 			else this.switchRef = firebase.database().ref('room/' + roomId + '/switches/');
