@@ -138,7 +138,6 @@ function Game_Avatar() {
 	OnlineManager.variableRef = null;
 	OnlineManager.user = null;
 	OnlineManager.syncBusy = false;	//同期接続する瞬間、送信が受信を上書きするのを阻止
-	var roomId = 1;
 
 	//ネット上からfirebaseファイルを読み込む
 	OnlineManager.initialize = function() {
@@ -200,7 +199,7 @@ function Game_Avatar() {
 
 		if (this.parameters['syncSwitchStart'] || this.parameters['syncSwitchEnd']) {
 			if (this.switchRef) this.switchRef.off();
-			else this.switchRef = firebase.database().ref('room/' + roomId + '/switches/');
+			else this.switchRef = firebase.database().ref('room/switches/');
 			OnlineManager.syncBusy = true;
 			this.switchRef.once('value', function(data) {
 				OnlineManager.syncBusy = false;
@@ -215,7 +214,7 @@ function Game_Avatar() {
 
 		if (this.parameters['syncVariableStart'] || this.parameters['syncVariableEnd']) {
 			if (this.variableRef) this.variableRef.off();
-			else this.variableRef = firebase.database().ref('room/' + roomId + '/variables/');
+			else this.variableRef = firebase.database().ref('room/variables/');
 			OnlineManager.syncBusy = true;
 			this.variableRef.once('value', function(data) {
 				OnlineManager.syncBusy = false;
@@ -247,7 +246,7 @@ function Game_Avatar() {
 			return;
 		}
 
-		this.mapRef = firebase.database().ref('room/'+roomId+'/map' + $gameMap.mapId().padZero(3));
+		this.mapRef = firebase.database().ref('room/map' + $gameMap.mapId().padZero(3));
 		this.selfRef = this.mapRef.child(this.user.uid);
 		this.selfRef.onDisconnect().remove();	//切断時にキャラ座標をリムーブ
 
