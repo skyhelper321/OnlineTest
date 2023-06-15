@@ -288,8 +288,8 @@ function Game_Avatar() {
 	//送信するプレイヤー情報
 	OnlineManager.playerInfo = function() {
 		var $ = $gamePlayer;
-		return {x: $.x, y: $.y, direction: $.direction(), speed: $.realMoveSpeed(), charaName: $.characterName(), charaIndex: $.characterIndex()};
-	};
+		return {roomId: 1,x: $.x, y: $.y, direction: $.direction(), speed: $.realMoveSpeed(), charaName: $.characterName(), charaIndex: $.characterIndex()};
+	}; //roomIdは仮
 
 	//プレイヤー情報をオンライン上に送信
 	OnlineManager.sendPlayerInfo = function() {
